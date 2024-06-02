@@ -1,12 +1,13 @@
 package guru.qa.niffler.jupiter.extension;
 
 import guru.qa.niffler.data.entity.CategoryEntity;
+import guru.qa.niffler.data.repository.SpendRepository;
 import guru.qa.niffler.data.repository.SpendRepositoryHibernate;
 import guru.qa.niffler.model.CategoryJson;
 
 public class DbCategoryExtension extends AbstractCategoryExtension {
 
-	private final SpendRepositoryHibernate srh = new SpendRepositoryHibernate();
+	private final SpendRepositoryHibernate srh = (SpendRepositoryHibernate) SpendRepository.getInstance();
 
 	@Override
 	protected CategoryJson createCategory(CategoryJson category) {

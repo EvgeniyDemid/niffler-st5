@@ -1,6 +1,7 @@
 package guru.qa.niffler.data.repository;
 
 import guru.qa.niffler.data.DataBase;
+import guru.qa.niffler.data.entity.AuthorityEntity;
 import guru.qa.niffler.data.entity.UserAuthEntity;
 import guru.qa.niffler.data.entity.UserEntity;
 import guru.qa.niffler.data.jdbc.DataSourceProvider;
@@ -111,7 +112,7 @@ public class UserRepositoryJdbc implements UserRepository {
 	}
 
 	@Override
-	public UserAuthEntity updateUserInAuth(UserAuthEntity userAuthEntity, List<Authority> listAuthority) {
+	public UserAuthEntity updateUserInAuth(UserAuthEntity userAuthEntity) {
 		try (Connection conn = authDataSource.getConnection()) {
 			PreparedStatement authorityDeletePs = conn.prepareStatement(
 					"DELETE  FROM \"authority\"  WHERE user_id=(select id from \"user\" where username =?) "
@@ -138,7 +139,7 @@ public class UserRepositoryJdbc implements UserRepository {
 				userPs.setObject(6, userAuthEntity.getUsername());
 				userPs.executeUpdate();
 
-				for (Authority authority : listAuthority) {
+				for (AuthorityEntity authority : userAuthEntity.getAuthorities()) {
 					authorityPs.setString(1, userAuthEntity.getUsername());
 					authorityPs.setString(2, authority.toString());
 					authorityPs.addBatch();

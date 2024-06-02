@@ -8,7 +8,6 @@ import guru.qa.niffler.model.CategoryJson;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 
-import java.util.Collections;
 import java.util.List;
 
 public class SpendRepositoryHibernate implements SpendRepository {
@@ -48,20 +47,25 @@ public class SpendRepositoryHibernate implements SpendRepository {
 
 	@Override
 	public void removeSpendByCategoryIdOfUser(CategoryJson category) {
-		String hql = "DELETE FROM spend WHERE category_id= :id and username= :user";
+		String hql = "DELETE FROM spend WHERE category_id= :id";
 		Query query = em.createQuery(hql, SpendEntity.class);
 		query.setParameter("id", category.id());
-		query.setParameter("user", category.username());
 	}
 
 	@Override
 	public List<SpendEntity> findAllByUsername(String username) {
-		return Collections.singletonList(em.find(SpendEntity.class, username));
+		String hql = "SELECT * FROM spend WHERE username= :username";
+		return (List<SpendEntity>) em.createQuery(hql, SpendEntity.class)
+				.setParameter("id", username)
+				.getResultList();
 	}
 
 	@Override
-	public CategoryEntity findCategory(String category) {
-		return em.find(CategoryEntity.class, category);
+	public List<CategoryEntity> findCategory(String category) {
+		String hql = "SELECT * FROM category WHERE category= :category";
+		return (List<CategoryEntity>) em.createQuery(hql, CategoryEntity.class)
+				.setParameter("category", category)
+				.getResultList();
 	}
 
 }

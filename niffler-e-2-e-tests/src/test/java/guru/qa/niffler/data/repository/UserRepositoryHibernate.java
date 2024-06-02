@@ -33,7 +33,7 @@ public class UserRepositoryHibernate implements UserRepository {
 	}
 
 	@Override
-	public UserAuthEntity updateUserInAuth(UserAuthEntity userAuthEntity, List<Authority> listAuthority) {
+	public UserAuthEntity updateUserInAuth(UserAuthEntity userAuthEntity) {
 		return authEm.merge(userAuthEntity);
 	}
 

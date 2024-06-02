@@ -1,10 +1,12 @@
 package guru.qa.niffler.test;
 
 import com.codeborne.selenide.Selenide;
+import guru.qa.niffler.data.entity.AuthorityEntity;
 import guru.qa.niffler.data.entity.UserAuthEntity;
 import guru.qa.niffler.data.entity.UserEntity;
 import guru.qa.niffler.data.repository.UserRepositoryJdbc;
 import guru.qa.niffler.data.repository.UserRepositoryStringJdbc;
+import guru.qa.niffler.enums.Authority;
 import guru.qa.niffler.jupiter.annotation.TestUser;
 import guru.qa.niffler.jupiter.extension.BrowserExtension;
 import guru.qa.niffler.jupiter.extension.DbCreateUserExtension;
@@ -60,7 +62,10 @@ public class LoginTest {
 	public void loginUserAfterEditByJdbc(UserJson userJson) {
 		UserJson editUser = UserJson.dataFromUser(userJson.username());
 		UserAuthEntity newAuthEntity = new UserAuthEntity().fromJson(editUser);
-		userRepositoryJdbc.updateUserInAuth(newAuthEntity, List.of(write));
+		AuthorityEntity authority = new AuthorityEntity();
+		authority.setAuthority(write);
+		newAuthEntity.setAuthorities(List.of(authority));
+		userRepositoryJdbc.updateUserInAuth(newAuthEntity);
 		userRepositoryJdbc.updateUserInUserdata(new UserEntity().fromJson(editUser));
 		doLogin(editUser);
 		mainPage.clickProfileButton();
@@ -75,7 +80,10 @@ public class LoginTest {
 	public void loginUserAfterEditBySpringJdbc(UserJson userJson) {
 		UserJson editUser = UserJson.dataFromUser(userJson.username());
 		UserAuthEntity newAuthEntity = new UserAuthEntity().fromJson(editUser);
-		userRpStringJdbc.updateUserInAuth(newAuthEntity, List.of(write));
+		AuthorityEntity authority = new AuthorityEntity();
+		authority.setAuthority(write);
+		newAuthEntity.setAuthorities(List.of(authority));
+		userRpStringJdbc.updateUserInAuth(newAuthEntity);
 		userRpStringJdbc.updateUserInUserdata(new UserEntity().fromJson(editUser));
 		doLogin(editUser);
 		mainPage.clickProfileButton();

@@ -24,6 +24,6 @@ public interface SpendRepository {
 
 	List<SpendEntity> findAllByUsername(String username);
 
-	CategoryEntity findCategory(String category);
+	List<CategoryEntity> findCategory(String category);
 
 }

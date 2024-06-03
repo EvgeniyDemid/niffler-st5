@@ -1,6 +1,6 @@
 package guru.qa.niffler.jupiter.extension;
 
-import guru.qa.niffler.api.CategoryApi;
+import guru.qa.niffler.api.SpendApi;
 import guru.qa.niffler.model.CategoryJson;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -25,8 +25,8 @@ public class HttpCategoryExtension extends AbstractCategoryExtension {
 
 	@Override
 	protected CategoryJson createCategory(CategoryJson category) throws IOException {
-		CategoryApi categoryApi = retrofit.create(CategoryApi.class);
-		return categoryApi.createCategory(category).execute().body();
+		SpendApi spendApi = retrofit.create(SpendApi.class);
+		return spendApi.createCategory(category).execute().body();
 	}
 
 	@Override

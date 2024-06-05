@@ -10,8 +10,12 @@ import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$$x;
 import static com.codeborne.selenide.Selenide.$x;
+import static guru.qa.niffler.page.BasePage.CONFIG;
 
 public class MainPage {
+
+	public static final String url = CONFIG.frontUrl();
+
 	private final ElementsCollection listSpending = $$x("//tbody/tr");
 	private final SelenideElement
 			deleteSelectButton = $x("//button[contains(text(),'Delete selected')]"),

@@ -1,6 +1,8 @@
 package guru.qa.niffler.page;
 
 import com.codeborne.selenide.SelenideElement;
+import guru.qa.niffler.model.UserJson;
+import io.qameta.allure.Step;
 
 import static com.codeborne.selenide.Selenide.$x;
 
@@ -25,4 +27,10 @@ public class LoginPage {
 		signUp.click();
 	}
 
+	@Step("Авторизоваться с пользователем")
+	public void login(UserJson userJson) {
+		userNameFieldSetValue(userJson.username());
+		passwordFieldSetValue(userJson.testData().password());
+		signUpClick();
+	}
 }

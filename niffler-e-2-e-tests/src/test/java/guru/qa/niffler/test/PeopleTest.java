@@ -1,46 +1,39 @@
 package guru.qa.niffler.test;
 
-import com.codeborne.selenide.Selenide;
 import guru.qa.niffler.jupiter.annotation.User;
 import guru.qa.niffler.jupiter.annotation.meta.WebTestJdbc;
+import guru.qa.niffler.jupiter.extension.BrowserExtension;
 import guru.qa.niffler.jupiter.extension.UserQueueExtension;
 import guru.qa.niffler.model.UserJson;
-import guru.qa.niffler.page.*;
+import guru.qa.niffler.page.AuthorizationPage;
+import guru.qa.niffler.page.FriendsPage;
+import guru.qa.niffler.page.MainPage;
+import guru.qa.niffler.page.PeoplePage;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
+import static com.codeborne.selenide.Selenide.open;
 import static guru.qa.niffler.enums.Alert.*;
 import static guru.qa.niffler.jupiter.annotation.User.UserType.*;
 
-@WebTestJdbc
 @ExtendWith({
-		UserQueueExtension.class
+		BrowserExtension.class, UserQueueExtension.class
 })
 public class PeopleTest {
-
+	
 	MainPage mainPage = new MainPage();
-	Common common = new Common();
-	AuthorizationPage authorizationPage = new AuthorizationPage();
-
-	void doLogin(UserJson user) {
-		Selenide.open("http://127.0.0.1:3000/");
-		authorizationPage.
-				clickLoginButton().
-				userNameFieldSetValue(user.username()).
-				passwordFieldSetValue(user.testData().password()).
-				signUpClick();
-	}
 
 	@Test
 	public void sendInvitationFriend(
 			@User(userType = INVITE_SENT) UserJson userInviteSend,
 			@User(userType = FRIEND) UserJson userFriend
 	) {
-		doLogin(userFriend);
+		open(PeoplePage.url, AuthorizationPage.class).clickLoginButton().login(userFriend);
 		mainPage.
 				clickAllPeopleButton().
-				clickActionFromUser(userInviteSend.username());
-		common.checkAlert(INVITATION_IS_SENT);
+				checkPageLoader().
+				clickActionFromUser(userInviteSend.username()).
+				checkAlert(INVITATION_IS_SENT);
 	}
 
 	@Test
@@ -48,11 +41,12 @@ public class PeopleTest {
 			@User(userType = FRIEND) UserJson userFriend,
 			@User(userType = INVITE_RECEIVED) UserJson userInviteReceived
 	) {
-		doLogin(userFriend);
+		open(FriendsPage.url, AuthorizationPage.class).clickLoginButton().login(userFriend);
 		mainPage.
 				clickFriendsButton().
-				clickSubmit(userInviteReceived.username());
-		common.checkAlert(INVITATION_IS_ACCEPTED);
+				checkPageLoader().
+				clickSubmit(userInviteReceived.username()).
+				checkAlert(INVITATION_IS_ACCEPTED);
 	}
 
 	@Test
@@ -60,11 +54,12 @@ public class PeopleTest {
 			@User(userType = FRIEND) UserJson userFriend,
 			@User(userType = INVITE_RECEIVED) UserJson userInviteReceived
 	) {
-		doLogin(userFriend);
+		open(FriendsPage.url, AuthorizationPage.class).clickLoginButton().login(userFriend);
 		mainPage.
 				clickFriendsButton().
-				clickDecline(userInviteReceived.username());
-		common.checkAlert(INVITATION_IS_DECLINED);
+				checkPageLoader().
+				clickDecline(userInviteReceived.username()).
+				checkAlert(INVITATION_IS_DECLINED);
 	}
 
 	@Test
@@ -72,10 +67,11 @@ public class PeopleTest {
 			@User(userType = FRIEND) UserJson userFriend,
 			@User(userType = FRIEND) UserJson userFriend1
 	) {
-		doLogin(userFriend);
+		open(FriendsPage.url, AuthorizationPage.class).clickLoginButton().login(userFriend);
 		mainPage.
 				clickFriendsButton().
-				clickDelete(userFriend1.username());
-		common.checkAlert(FRIEND_IS_DELETED);
+				checkPageLoader().
+				clickDelete(userFriend1.username()).
+				checkAlert(FRIEND_IS_DELETED);
 	}
 }

@@ -4,6 +4,7 @@ import guru.qa.niffler.data.DataBase;
 import guru.qa.niffler.data.entity.UserAuthEntity;
 import guru.qa.niffler.data.entity.UserEntity;
 import guru.qa.niffler.data.jdbc.DataSourceProvider;
+import guru.qa.niffler.data.sjdbc.UserAuthEntityRowMapper;
 import guru.qa.niffler.data.sjdbc.UserEntityRowMapper;
 import guru.qa.niffler.enums.Authority;
 import org.springframework.dao.DataRetrievalFailureException;
@@ -96,7 +97,7 @@ public class UserRepositoryStringJdbc implements UserRepository {
 	}
 
 	@Override
-	public UserAuthEntity updateUserInAuth(UserAuthEntity userAuthEntity, List<Authority> listAuthority) {
+	public UserAuthEntity updateUserInAuth(UserAuthEntity userAuthEntity) {
 		jdbcAuthTemplate.update(
 				"DELETE  FROM \"authority\"  WHERE user_id=(select id from \"user\" where username = ?)",
 				userAuthEntity.getUsername()
@@ -119,12 +120,12 @@ public class UserRepositoryStringJdbc implements UserRepository {
 						@Override
 						public void setValues(PreparedStatement ps, int i) throws SQLException {
 							ps.setObject(1, userAuthEntity.getUsername());
-							ps.setString(2, Authority.values()[i].name());
+							ps.setString(2, userAuthEntity.getAuthorities().get(i).getAuthority().name());
 						}
 
 						@Override
 						public int getBatchSize() {
-							return listAuthority.size();
+							return userAuthEntity.getAuthorities().size();
 						}
 					}
 			);
@@ -156,4 +157,31 @@ public class UserRepositoryStringJdbc implements UserRepository {
 			return Optional.empty();
 		}
 	}
+
+	@Override
+	public Optional<UserAuthEntity> findUserInAuthByUsername(String username) {
+		try {
+			return Optional.ofNullable(jdbcAuthTemplate.queryForObject(
+					"SELECT * FROM \"user\" WHERE username = ?",
+					UserAuthEntityRowMapper.instance,
+					username
+			));
+		} catch (DataRetrievalFailureException e) {
+			return Optional.empty();
+		}
+	}
+
+	@Override
+	public Optional<UserEntity> findInUserdataByUsername(String username) {
+		try {
+			return Optional.ofNullable(jdbcUDTemplate.queryForObject(
+					"SELECT * FROM \"user\" WHERE username = ?",
+					UserEntityRowMapper.instance,
+					username
+			));
+		} catch (DataRetrievalFailureException e) {
+			return Optional.empty();
+		}
+	}
+
 }

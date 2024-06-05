@@ -8,6 +8,18 @@ import java.util.List;
 
 public interface SpendRepository {
 
+	static SpendRepository getInstance() {
+		String repo = System.getProperty("repo");
+
+		if ("hibernate".equals(repo)) {
+			return new SpendRepositoryHibernate();
+		}
+		if ("sjdbc".equals(repo)) {
+			return new SpendRepositoryStringJdbc();
+		}
+		return new SpendRepositoryHibernate();
+	}
+
 	CategoryEntity createCategory(CategoryEntity category);
 
 	CategoryEntity editCategory(CategoryEntity category);
@@ -23,4 +35,7 @@ public interface SpendRepository {
 	void removeSpendByCategoryIdOfUser(CategoryJson category);
 
 	List<SpendEntity> findAllByUsername(String username);
+
+	List<CategoryEntity> findCategory(String category);
+
 }

@@ -10,12 +10,14 @@ import java.util.UUID;
 
 public interface UserRepository {
 
+	String repo = System.getProperty("repo");
+
 	static UserRepository getInstance() {
-		if ("sjdbc".equals(System.getProperty("repo"))) {
+		if ("sjdbc".equals(repo)) {
 			return new UserRepositoryStringJdbc();
 		}
-		if ("hibernate".equals(System.getProperty("repo"))) {
-			return new UserRepositoryStringHibernate();
+		if ("hibernate".equals(repo)) {
+			return new UserRepositoryHibernate();
 		}
 		return new UserRepositoryJdbc();
 	}
@@ -24,9 +26,14 @@ public interface UserRepository {
 
 	UserEntity createUserInUserdata(UserEntity userEntity);
 
-	UserAuthEntity updateUserInAuth(UserAuthEntity userAuthEntity, List<Authority> listAuthority);
+	UserAuthEntity updateUserInAuth(UserAuthEntity userAuthEntity);
 
 	UserEntity updateUserInUserdata(UserEntity userEntity);
 
 	Optional<UserEntity> findUserInUserDataByID(UUID id);
+
+	Optional<UserAuthEntity> findUserInAuthByUsername(String username);
+
+	Optional<UserEntity> findInUserdataByUsername(String username);
+
 }

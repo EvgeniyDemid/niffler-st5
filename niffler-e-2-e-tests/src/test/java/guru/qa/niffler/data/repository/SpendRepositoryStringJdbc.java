@@ -4,6 +4,7 @@ import guru.qa.niffler.data.DataBase;
 import guru.qa.niffler.data.entity.CategoryEntity;
 import guru.qa.niffler.data.entity.SpendEntity;
 import guru.qa.niffler.data.jdbc.DataSourceProvider;
+import guru.qa.niffler.data.sjdbc.CategoryEntityRowMapper;
 import guru.qa.niffler.data.sjdbc.SendEntityRowMapper;
 import guru.qa.niffler.model.CategoryJson;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -113,5 +114,12 @@ public class SpendRepositoryStringJdbc implements SpendRepository {
 		return jdbcTemplate.query("SELECT * FROM public.spend where username = ?;",
 				SendEntityRowMapper.instance,
 				username);
+	}
+
+	@Override
+	public List<CategoryEntity> findCategory(String category) {
+		return jdbcTemplate.query("SELECT * FROM category WHERE category= ?",
+				CategoryEntityRowMapper.instance,
+				category);
 	}
 }

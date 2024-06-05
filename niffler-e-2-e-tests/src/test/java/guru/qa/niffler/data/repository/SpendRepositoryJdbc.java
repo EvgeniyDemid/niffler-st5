@@ -203,4 +203,26 @@ public class SpendRepositoryJdbc implements SpendRepository {
 			throw new RuntimeException(e);
 		}
 	}
+
+	@Override
+	public List<CategoryEntity> findCategory(String category) {
+		try (Connection conn = spendDataSource.getConnection();
+			 PreparedStatement ps = conn.prepareStatement(
+					 "SELECT * FROM category WHERE category=?"
+			 )) {
+			ps.setObject(1, category);
+			ResultSet resultSet = ps.executeQuery();
+			ArrayList<CategoryEntity> listCategory = new ArrayList<>();
+			while (resultSet.next()) {
+				CategoryEntity cat = new CategoryEntity();
+				cat.setId(UUID.fromString(resultSet.getString("id")));
+				cat.setCategory(resultSet.getString("category"));
+				cat.setUsername(resultSet.getString("username"));
+				listCategory.add(cat);
+			}
+			return listCategory;
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+	}
 }

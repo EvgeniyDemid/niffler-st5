@@ -32,10 +32,14 @@ public interface SpendRepository {
 
 	void removeSpend(SpendEntity spend);
 
+	void removeSpendById(String spendId);
+
 	void removeSpendByCategoryIdOfUser(CategoryJson category);
 
 	List<SpendEntity> findAllByUsername(String username);
 
 	List<CategoryEntity> findCategory(String category);
+
+	CategoryEntity findUserCategoryByName(String username, String category);
 
 }

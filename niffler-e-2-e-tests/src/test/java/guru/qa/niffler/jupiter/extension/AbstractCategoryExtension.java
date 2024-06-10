@@ -13,7 +13,7 @@ public abstract class AbstractCategoryExtension implements BeforeEachCallback, A
 	public static final ExtensionContext.Namespace NAMESPACE
 			= ExtensionContext.Namespace.create(AbstractCategoryExtension.class);
 
-	protected abstract CategoryJson createCategory(CategoryJson category) throws IOException;
+	protected abstract CategoryJson createCategory(CategoryJson category) throws Exception;
 
 	protected abstract void removeCategory(CategoryJson category);
 
@@ -34,6 +34,8 @@ public abstract class AbstractCategoryExtension implements BeforeEachCallback, A
 								getStore(NAMESPACE).
 								put(extensionContext.getUniqueId(), createCategory(categoryJson));
 					} catch (IOException e) {
+						throw new RuntimeException(e);
+					} catch (Exception e) {
 						throw new RuntimeException(e);
 					}
 				});

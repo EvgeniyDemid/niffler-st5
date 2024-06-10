@@ -105,6 +105,11 @@ public class SpendRepositoryStringJdbc implements SpendRepository {
 	}
 
 	@Override
+	public void removeSpendById(String spendId) {
+		
+	}
+
+	@Override
 	public void removeSpendByCategoryIdOfUser(CategoryJson category) {
 
 	}
@@ -121,5 +126,10 @@ public class SpendRepositoryStringJdbc implements SpendRepository {
 		return jdbcTemplate.query("SELECT * FROM category WHERE category= ?",
 				CategoryEntityRowMapper.instance,
 				category);
+	}
+
+	@Override
+	public CategoryEntity findUserCategoryByName(String username, String category) {
+		return null;
 	}
 }

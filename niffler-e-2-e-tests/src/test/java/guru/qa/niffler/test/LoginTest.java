@@ -22,6 +22,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.util.List;
 
+import static com.codeborne.selenide.Selenide.open;
 import static guru.qa.niffler.enums.Authority.write;
 
 @ExtendWith({BrowserExtension.class, DbCreateUserExtension.class})
@@ -40,14 +41,13 @@ public class LoginTest {
 
 	@BeforeEach
 	void openPage() {
-		Selenide.open("http://127.0.0.1:3000/");
+		open(MainPage.url);
 	}
 
 	private void doLogin(UserJson userJson) {
-		authorizationPage.clickLoginButton();
-		loginPage.userNameFieldSetValue(userJson.username());
-		loginPage.passwordFieldSetValue(userJson.testData().password());
-		loginPage.signUpClick();
+		authorizationPage.
+				clickLoginButton().
+				login(userJson);
 	}
 
 	@Test

@@ -13,24 +13,24 @@ public class LoginPage {
 			passwordField = $x("//input[@name='password']"),
 			signUp = $x("//button[contains(text(),'Sign In')]");
 
-	public LoginPage userNameFieldSetValue(String userName) {
+	public LoginPage setUsername(String userName) {
 		userNameField.setValue(userName);
 		return this;
 	}
 
-	public LoginPage passwordFieldSetValue(String password) {
+	public LoginPage setPassword(String password) {
 		passwordField.setValue(password);
 		return this;
 	}
 
-	public void signUpClick() {
+	public void clickSignUp() {
 		signUp.click();
 	}
 
 	@Step("Авторизоваться с пользователем")
 	public void login(UserJson userJson) {
-		userNameFieldSetValue(userJson.username());
-		passwordFieldSetValue(userJson.testData().password());
-		signUpClick();
+		setUsername(userJson.username());
+		setPassword(userJson.testData().password());
+		clickSignUp();
 	}
 }

@@ -49,7 +49,8 @@ public class SpendRepositoryHibernate implements SpendRepository {
 	public void removeSpendById(String spendId) {
 		String hql = "DELETE FROM spend WHERE id= :id";
 		Query query = em.createQuery(hql, SpendEntity.class);
-		query.setParameter("id", spendId);
+		query.setParameter("id", spendId).
+				executeUpdate();
 	}
 
 	@Override
@@ -76,12 +77,12 @@ public class SpendRepositoryHibernate implements SpendRepository {
 	}
 
 	@Override
-	public CategoryEntity findUserCategoryByName(String username, String category) {
+	public CategoryEntity findCategoryByNameAndUsername(String username, String category) {
 		String hql = "SELECT * FROM spend WHERE username= :username AND category= :category";
 		return em.createQuery(hql, CategoryEntity.class)
 				.setParameter("username", username)
 				.setParameter("category", category)
-				.getResultList().getFirst();
+				.getSingleResult();
 	}
 
 }

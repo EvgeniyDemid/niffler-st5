@@ -18,6 +18,8 @@ public class MainPage extends BasePage<MainPage> {
 
 	public static final String url = CONFIG.frontUrl();
 
+	private final ReactCalendar reactCalendar = new ReactCalendar();
+
 	private final ElementsCollection listSpending = $$x("//tbody/tr");
 	private final SelenideElement
 			deleteSelectButton = $x("//button[contains(text(),'Delete selected')]"),
@@ -90,7 +92,7 @@ public class MainPage extends BasePage<MainPage> {
 
 	public MainPage setSpendDate(Date date) {
 		spendDateInput.click();
-		new ReactCalendar().selectDate(date);
+		reactCalendar.selectDate(date);
 		spendDateInput.pressEnter();
 		return this;
 	}

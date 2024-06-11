@@ -160,7 +160,7 @@ public class SpendRepositoryJdbc implements SpendRepository {
 
 	@Override
 	public void removeSpendById(String spendId) {
-		
+
 	}
 
 	@Override
@@ -232,7 +232,7 @@ public class SpendRepositoryJdbc implements SpendRepository {
 	}
 
 	@Override
-	public CategoryEntity findUserCategoryByName(String username, String category) {
+	public CategoryEntity findCategoryByNameAndUsername(String username, String category) {
 		return null;
 	}
 }

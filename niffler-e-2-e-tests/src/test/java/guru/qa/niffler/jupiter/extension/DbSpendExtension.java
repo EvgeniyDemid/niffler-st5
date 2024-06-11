@@ -11,7 +11,7 @@ public class DbSpendExtension extends AbstractSpendExtension {
 
 	@Override
 	protected SpendJson createSpend(SpendJson spend) {
-		CategoryEntity category = spendRepository.findUserCategoryByName(spend.username(), spend.category());
+		CategoryEntity category = spendRepository.findCategoryByNameAndUsername(spend.username(), spend.category());
 		return SpendJson.fromEntity(spendRepository.createSpend(SpendEntity.fromJson(spend, category)));
 	}
 

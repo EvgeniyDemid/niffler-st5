@@ -5,13 +5,21 @@ import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import io.qameta.allure.Step;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import static com.codeborne.selenide.CollectionCondition.size;
-import static com.codeborne.selenide.Condition.text;
-import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$$x;
 import static com.codeborne.selenide.Selenide.$x;
 
-public class MainPage {
+public class MainPage extends BasePage<MainPage> {
+
+
+	public static final String url = CONFIG.frontUrl();
+
+	private final ReactCalendar reactCalendar = new ReactCalendar();
+
 	private final ElementsCollection listSpending = $$x("//tbody/tr");
 	private final SelenideElement
 			deleteSelectButton = $x("//button[contains(text(),'Delete selected')]"),
@@ -19,7 +27,9 @@ public class MainPage {
 			friendsButton = $x("//*[@href='/friends']"),
 			profileButton = $x("//*[@href='/profile']"),
 			title = $x("//h1[contains(text(),'Niffler. The coin keeper.')]"),
-			logout = $x("//button[contains(@class,'logout')]");
+			logout = $x("//button[contains(@class,'logout')]"),
+			titleSpend = $x("//h2[contains(text(),'Add new spending')]"),
+			spendDateInput = $x("//div[@class='calendar-wrapper ']//input");
 
 	@Step("Проставить чек-бокс напротив трат ")
 	public MainPage selectSpending(String spending) {
@@ -72,5 +82,25 @@ public class MainPage {
 	public AuthorizationPage clickLogout() {
 		logout.click();
 		return new AuthorizationPage();
+	}
+
+	@Override
+	public MainPage checkPageLoader() {
+		titleSpend.shouldBe(visible);
+		return this;
+	}
+
+	public MainPage setSpendDate(Date date) {
+		spendDateInput.click();
+		reactCalendar.selectDate(date);
+		spendDateInput.pressEnter();
+		return this;
+	}
+
+	public MainPage checkSpendDate(Date date) {
+		spendDateInput.shouldHave(
+				attribute("value", new SimpleDateFormat("dd/MM/yyyy").format(date)
+				));
+		return this;
 	}
 }

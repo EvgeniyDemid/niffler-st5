@@ -24,42 +24,21 @@ import java.io.ByteArrayInputStream;
 import java.util.List;
 import java.util.Objects;
 
-@WebTestJdbc
-public class DbSpendingTest {
+import static com.codeborne.selenide.Selenide.open;
 
-	AuthorizationPage authorizationPage = new AuthorizationPage();
+@WebTestJdbc
+public class DbSpendingTest extends BaseTest {
 
 	MainPage mainPage = new MainPage();
-
-	LoginPage loginPage = new LoginPage();
 
 	SpendRepositoryJdbc spendRepositoryJdbc = new SpendRepositoryJdbc();
 	SpendRepositoryStringJdbc spendRepositoryStringJdbc = new SpendRepositoryStringJdbc();
 
-
-	static {
-		Configuration.browserSize = "1920x1080";
-	}
-
 	@BeforeEach
 	void doLogin(UserJson userJson) {
-		Selenide.open("http://127.0.0.1:3000/");
-		authorizationPage.clickLoginButton();
-		loginPage.userNameFieldSetValue(userJson.username());
-		loginPage.passwordFieldSetValue(userJson.testData().password());
-		loginPage.signUpClick();
-	}
-
-	@AfterEach
-	void doScreenshot() {
-		Allure.addAttachment(
-				"Screen on test end",
-				new ByteArrayInputStream(
-						Objects.requireNonNull(
-								Selenide.screenshot(OutputType.BYTES)
-						)
-				)
-		);
+		open(MainPage.url, AuthorizationPage.class).
+				clickLoginButton().
+				login(userJson);
 	}
 
 	@TestUser

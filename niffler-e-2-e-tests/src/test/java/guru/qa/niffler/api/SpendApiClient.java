@@ -2,14 +2,13 @@ package guru.qa.niffler.api;
 
 import guru.qa.niffler.model.CategoryJson;
 import guru.qa.niffler.model.SpendJson;
-import retrofit2.Call;
 
 public class SpendApiClient extends ApiClient {
 
 	private final SpendApi spendApi;
 
 	public SpendApiClient() {
-		super(CFG.frontUrl());
+		super(CFG.spendUrl());
 		this.spendApi = retrofit.create(SpendApi.class);
 	}
 

@@ -7,16 +7,14 @@ import guru.qa.niffler.model.SpendJson;
 import org.junit.jupiter.api.extension.*;
 import org.junit.platform.commons.support.AnnotationSupport;
 
-import java.io.IOException;
-
 public abstract class AbstractSpendExtension implements BeforeEachCallback, AfterEachCallback, ParameterResolver {
 
 	public static final ExtensionContext.Namespace NAMESPACE
 			= ExtensionContext.Namespace.create(AbstractSpendExtension.class);
 
-	protected abstract Object createSpend(SpendEntity spendJson) throws IOException;
+	protected abstract Object createSpend(SpendJson spendJson) throws Exception;
 
-	protected abstract void removeSpend(SpendEntity spend);
+	protected abstract void removeSpend(SpendJson spendJson);
 
 	@Override
 	public void beforeEach(ExtensionContext context) throws Exception {
@@ -29,13 +27,13 @@ public abstract class AbstractSpendExtension implements BeforeEachCallback, Afte
 				GenerateSpend.class
 		).ifPresent(
 				generateSpend -> {
-					SpendEntity randomSpend = SpendEntity.randomByCategory(category);
+					SpendJson randomSpend = SpendJson.fromEntity(SpendEntity.randomByCategory(category));
 					try {
 						context.getStore(NAMESPACE).put(
 								context.getUniqueId(),
 								createSpend(randomSpend)
 						);
-					} catch (IOException e) {
+					} catch (Exception e) {
 						throw new RuntimeException(e);
 					}
 
@@ -45,7 +43,7 @@ public abstract class AbstractSpendExtension implements BeforeEachCallback, Afte
 
 	@Override
 	public void afterEach(ExtensionContext context) {
-		removeSpend(context.getStore(NAMESPACE).get(context.getUniqueId(), SpendEntity.class));
+		removeSpend(context.getStore(NAMESPACE).get(context.getUniqueId(), SpendJson.class));
 	}
 
 	@Override
@@ -58,6 +56,6 @@ public abstract class AbstractSpendExtension implements BeforeEachCallback, Afte
 
 	@Override
 	public SpendJson resolveParameter(ParameterContext parameterContext, ExtensionContext extensionContext) throws ParameterResolutionException {
-		return SpendJson.fromEntity(extensionContext.getStore(NAMESPACE).get(extensionContext.getUniqueId(), SpendEntity.class));
+		return extensionContext.getStore(NAMESPACE).get(extensionContext.getUniqueId(), SpendJson.class);
 	}
 }

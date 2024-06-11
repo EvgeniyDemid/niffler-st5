@@ -9,8 +9,11 @@ import static com.codeborne.selenide.Condition.attribute;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.$$x;
 import static com.codeborne.selenide.Selenide.$x;
+import static guru.qa.niffler.page.BasePage.CONFIG;
 
 public class ProfilePage {
+
+	public static final String url = CONFIG.frontUrl() + "profile";
 
 	private final ElementsCollection categoriesList = $$x("//*[@class='categories__list']/li");
 

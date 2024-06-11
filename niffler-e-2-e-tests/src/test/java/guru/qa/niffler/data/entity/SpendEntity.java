@@ -60,7 +60,7 @@ public class SpendEntity implements Serializable {
 		return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() : getClass().hashCode();
 	}
 
-	public static SpendEntity fromJson(SpendJson spendJson, CategoryJson categoryJson) {
+	public static SpendEntity fromJson(SpendJson spendJson, CategoryEntity category) {
 		SpendEntity spend = new SpendEntity();
 		spend.setId(spendJson.id());
 		spend.setUsername(spendJson.username());
@@ -68,7 +68,7 @@ public class SpendEntity implements Serializable {
 		spend.setCurrency(spend.getCurrency());
 		spend.setAmount(spendJson.amount());
 		spend.setDescription(spend.getDescription());
-		spend.setCategory(CategoryEntity.fromJson(categoryJson));
+		spend.setCategory(category);
 		return spend;
 	}
 

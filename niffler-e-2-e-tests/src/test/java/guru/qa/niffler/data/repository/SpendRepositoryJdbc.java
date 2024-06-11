@@ -159,6 +159,11 @@ public class SpendRepositoryJdbc implements SpendRepository {
 	}
 
 	@Override
+	public void removeSpendById(String spendId) {
+
+	}
+
+	@Override
 	public void removeSpendByCategoryIdOfUser(CategoryJson category) {
 		try (Connection connection =
 					 spendDataSource.getConnection();
@@ -224,5 +229,10 @@ public class SpendRepositoryJdbc implements SpendRepository {
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		}
+	}
+
+	@Override
+	public CategoryEntity findCategoryByNameAndUsername(String username, String category) {
+		return null;
 	}
 }

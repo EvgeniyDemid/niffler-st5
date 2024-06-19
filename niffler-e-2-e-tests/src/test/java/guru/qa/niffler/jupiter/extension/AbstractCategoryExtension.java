@@ -1,5 +1,6 @@
 package guru.qa.niffler.jupiter.extension;
 
+import guru.qa.niffler.jupiter.annotation.AddCategoryWithoutDelete;
 import guru.qa.niffler.jupiter.annotation.GenerateCategory;
 import guru.qa.niffler.model.CategoryJson;
 import guru.qa.niffler.model.UserJson;
@@ -39,11 +40,35 @@ public abstract class AbstractCategoryExtension implements BeforeEachCallback, A
 						throw new RuntimeException(e);
 					}
 				});
+		AnnotationSupport.findAnnotation(
+				extensionContext.getRequiredTestMethod(),
+				AddCategoryWithoutDelete.class
+		).ifPresent(
+				category -> {
+					CategoryJson categoryJson = CategoryJson.randomByUsername(user.username());
+					try {
+						extensionContext.
+								getStore(NAMESPACE).
+								put(extensionContext.getUniqueId(), createCategory(categoryJson));
+					} catch (IOException e) {
+						throw new RuntimeException(e);
+					} catch (Exception e) {
+						throw new RuntimeException(e);
+					}
+				});
+
 	}
 
 	@Override
 	public void afterEach(ExtensionContext context) {
-		removeCategory(context.getStore(NAMESPACE).get(context.getUniqueId(), CategoryJson.class));
+		AnnotationSupport.findAnnotation(
+				context.getRequiredTestMethod(),
+				GenerateCategory.class
+		).ifPresent(
+				category -> {
+					removeCategory(context.getStore(NAMESPACE).get(context.getUniqueId(), CategoryJson.class));
+				});
+
 	}
 
 	@Override

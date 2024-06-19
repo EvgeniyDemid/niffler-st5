@@ -141,7 +141,7 @@ public class UserRepositoryJdbc implements UserRepository {
 
 				for (AuthorityEntity authority : userAuthEntity.getAuthorities()) {
 					authorityPs.setString(1, userAuthEntity.getUsername());
-					authorityPs.setString(2, authority.toString());
+					authorityPs.setString(2, authority.getAuthority().name());
 					authorityPs.addBatch();
 					authorityPs.clearParameters();
 				}

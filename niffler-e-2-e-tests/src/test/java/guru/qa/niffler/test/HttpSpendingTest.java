@@ -8,12 +8,13 @@ import guru.qa.niffler.model.SpendJson;
 import guru.qa.niffler.model.UserJson;
 import guru.qa.niffler.page.AuthorizationPage;
 import guru.qa.niffler.page.MainPage;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import static com.codeborne.selenide.Selenide.open;
 
-
+@TestClassOrder(ClassOrderer.OrderAnnotation.class)
+@Nested
+@Order(3)
 @WebTestHttp
 public class HttpSpendingTest extends BaseTest {
 

@@ -1,37 +1,36 @@
 package guru.qa.niffler.test;
 
-import com.codeborne.selenide.Selenide;
 import guru.qa.niffler.data.entity.AuthorityEntity;
 import guru.qa.niffler.data.entity.UserAuthEntity;
 import guru.qa.niffler.data.entity.UserEntity;
 import guru.qa.niffler.data.repository.UserRepositoryJdbc;
 import guru.qa.niffler.data.repository.UserRepositoryStringJdbc;
-import guru.qa.niffler.enums.Authority;
 import guru.qa.niffler.jupiter.annotation.TestUser;
 import guru.qa.niffler.jupiter.extension.BrowserExtension;
 import guru.qa.niffler.jupiter.extension.DbCreateUserExtension;
 import guru.qa.niffler.model.UserJson;
 import guru.qa.niffler.page.AuthorizationPage;
-import guru.qa.niffler.page.LoginPage;
 import guru.qa.niffler.page.MainPage;
 import guru.qa.niffler.page.ProfilePage;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.parallel.Execution;
 
 import java.util.List;
 
 import static com.codeborne.selenide.Selenide.open;
 import static guru.qa.niffler.enums.Authority.write;
+import static org.junit.jupiter.api.parallel.ExecutionMode.SAME_THREAD;
 
+@Execution(SAME_THREAD)
+@TestClassOrder(ClassOrderer.OrderAnnotation.class)
+@Nested
+@Order(4)
 @ExtendWith({BrowserExtension.class, DbCreateUserExtension.class})
-public class LoginTest {
+public class LoginTest extends BaseTest {
 	AuthorizationPage authorizationPage = new AuthorizationPage();
 
 	MainPage mainPage = new MainPage();
-
-	LoginPage loginPage = new LoginPage();
 
 	ProfilePage profilePage = new ProfilePage();
 
@@ -55,6 +54,77 @@ public class LoginTest {
 	public void loginNewUser(UserJson userJson) {
 		doLogin(userJson);
 		mainPage.checkTitleIsVisible();
+	}
+
+	@Test
+	public void checkRegisterButtonOnAuthorizationPage() {
+		authorizationPage.checkRegisterButton();
+	}
+
+	@Test
+	public void checkLoginButtonOnAuthorizationPage() {
+		authorizationPage.loginButtonIsVisible();
+	}
+
+	@Test
+	public void checkTitleOnAuthorizationPage() {
+		authorizationPage.checkTitle();
+	}
+
+	@Test
+	public void checkTitleOnLoginPage() {
+		authorizationPage.
+				clickLoginButton().
+				checkTitle();
+	}
+
+	@Test
+	public void checkUserNameFieldOnLoginPage() {
+		authorizationPage.
+				clickLoginButton().
+				checkUsername();
+	}
+
+	@Test
+	public void checkPasswordOnLoginPage() {
+		authorizationPage.
+				clickLoginButton().
+				checkPassword();
+	}
+
+	@Test
+	public void checkSignInOnLoginPage() {
+		authorizationPage.
+				clickLoginButton().
+				checkSignIn();
+	}
+
+	@Test
+	public void checkSignUpOnLoginPage() {
+		authorizationPage.
+				clickLoginButton().
+				checkSignUp();
+	}
+
+	@Test
+	public void checkTitleOnRegisterPage() {
+		authorizationPage.
+				clickRegisterButton().
+				checkTitle();
+	}
+
+	@Test
+	public void checkUserNameOnRegisterPage() {
+		authorizationPage.
+				clickRegisterButton().
+				checkUserName();
+	}
+
+	@Test
+	public void checkPasswordOnRegisterPage() {
+		authorizationPage.
+				clickRegisterButton().
+				checkPassword();
 	}
 
 	@Test

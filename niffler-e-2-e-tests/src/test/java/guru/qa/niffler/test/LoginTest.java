@@ -1,18 +1,15 @@
 package guru.qa.niffler.test;
 
-import com.codeborne.selenide.Selenide;
 import guru.qa.niffler.data.entity.AuthorityEntity;
 import guru.qa.niffler.data.entity.UserAuthEntity;
 import guru.qa.niffler.data.entity.UserEntity;
 import guru.qa.niffler.data.repository.UserRepositoryJdbc;
 import guru.qa.niffler.data.repository.UserRepositoryStringJdbc;
-import guru.qa.niffler.enums.Authority;
 import guru.qa.niffler.jupiter.annotation.TestUser;
 import guru.qa.niffler.jupiter.extension.BrowserExtension;
 import guru.qa.niffler.jupiter.extension.DbCreateUserExtension;
 import guru.qa.niffler.model.UserJson;
 import guru.qa.niffler.page.AuthorizationPage;
-import guru.qa.niffler.page.LoginPage;
 import guru.qa.niffler.page.MainPage;
 import guru.qa.niffler.page.ProfilePage;
 import org.junit.jupiter.api.Assertions;
@@ -30,8 +27,6 @@ public class LoginTest {
 	AuthorizationPage authorizationPage = new AuthorizationPage();
 
 	MainPage mainPage = new MainPage();
-
-	LoginPage loginPage = new LoginPage();
 
 	ProfilePage profilePage = new ProfilePage();
 

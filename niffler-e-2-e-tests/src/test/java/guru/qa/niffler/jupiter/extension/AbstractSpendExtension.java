@@ -7,6 +7,9 @@ import guru.qa.niffler.model.SpendJson;
 import org.junit.jupiter.api.extension.*;
 import org.junit.platform.commons.support.AnnotationSupport;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public abstract class AbstractSpendExtension implements BeforeEachCallback, AfterEachCallback, ParameterResolver {
 
 	public static final ExtensionContext.Namespace NAMESPACE
@@ -27,35 +30,48 @@ public abstract class AbstractSpendExtension implements BeforeEachCallback, Afte
 				GenerateSpend.class
 		).ifPresent(
 				generateSpend -> {
-					SpendJson randomSpend = SpendJson.fromEntity(SpendEntity.randomByCategory(category));
-					try {
-						context.getStore(NAMESPACE).put(
-								context.getUniqueId(),
-								createSpend(randomSpend)
-						);
-					} catch (Exception e) {
-						throw new RuntimeException(e);
+					ArrayList<SpendJson> arrayListSpend = new ArrayList<>();
+					for (int i = 0; i < generateSpend.value(); i++) {
+						SpendJson randomSpend = SpendJson.fromEntity(SpendEntity.randomByCategory(category));
+						try {
+							arrayListSpend.add((SpendJson) createSpend(randomSpend));
+						} catch (Exception e) {
+							throw new RuntimeException(e);
+						}
 					}
-
+					context.getStore(NAMESPACE).put(
+							context.getUniqueId(),
+							arrayListSpend
+					);
 				}
 		);
 	}
 
 	@Override
 	public void afterEach(ExtensionContext context) {
-		removeSpend(context.getStore(NAMESPACE).get(context.getUniqueId(), SpendJson.class));
+		for (Object spendJson : context.getStore(NAMESPACE).get(context.getUniqueId(), List.class)) {
+			removeSpend((SpendJson) spendJson);
+		}
 	}
 
 	@Override
 	public boolean supportsParameter(ParameterContext parameterContext, ExtensionContext extensionContext) throws ParameterResolutionException {
-		return parameterContext
+		Class<?> type = parameterContext
 				.getParameter()
-				.getType()
-				.isAssignableFrom(SpendJson.class);
+				.getType();
+		return type.isAssignableFrom(SpendJson.class) || type.isAssignableFrom(SpendJson[].class);
 	}
 
 	@Override
-	public SpendJson resolveParameter(ParameterContext parameterContext, ExtensionContext extensionContext) throws ParameterResolutionException {
-		return extensionContext.getStore(NAMESPACE).get(extensionContext.getUniqueId(), SpendJson.class);
+	public Object resolveParameter(ParameterContext parameterContext, ExtensionContext extensionContext) throws ParameterResolutionException {
+		List<SpendJson> spendJsonList =
+				extensionContext.
+						getStore(NAMESPACE).
+						get(extensionContext.getUniqueId(), List.class);
+		Class<?> type = parameterContext
+				.getParameter()
+				.getType();
+		return type.isAssignableFrom(SpendJson.class) ?
+				spendJsonList.getFirst() : spendJsonList.toArray(SpendJson[]::new);
 	}
 }

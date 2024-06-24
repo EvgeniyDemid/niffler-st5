@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.javafaker.Faker;
+import guru.qa.niffler.data.entity.UserEntity;
 import guru.qa.niffler.enums.CurrencyValues;
 
 import java.util.Locale;
@@ -72,5 +73,19 @@ public record UserJson(
 				faker.internet().url(),
 				null,
 				new TestData(faker.internet().password()));
+	}
+
+	public static UserJson fromEntity(UserEntity userEntity) {
+		return new UserJson(
+				userEntity.getId(),
+				userEntity.getUsername(),
+				userEntity.getFirstname(),
+				userEntity.getSurname(),
+				userEntity.getCurrency(),
+				null,
+				null,
+				null,
+				null
+		);
 	}
 }

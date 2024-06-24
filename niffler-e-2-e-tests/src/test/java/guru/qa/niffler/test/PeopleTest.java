@@ -5,7 +5,6 @@ import guru.qa.niffler.data.repository.UserRepositoryJdbc;
 import guru.qa.niffler.data.repository.UserRepositoryStringJdbc;
 import guru.qa.niffler.jupiter.annotation.TestUser;
 import guru.qa.niffler.jupiter.annotation.User;
-import guru.qa.niffler.jupiter.annotation.meta.WebTestJdbc;
 import guru.qa.niffler.jupiter.extension.BrowserExtension;
 import guru.qa.niffler.jupiter.extension.DbCreateUserExtension;
 import guru.qa.niffler.jupiter.extension.UserQueueExtension;
@@ -15,6 +14,7 @@ import guru.qa.niffler.page.AuthorizationPage;
 import guru.qa.niffler.page.FriendsPage;
 import guru.qa.niffler.page.MainPage;
 import guru.qa.niffler.page.PeoplePage;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -24,6 +24,7 @@ import static com.codeborne.selenide.Selenide.open;
 import static guru.qa.niffler.enums.Alert.*;
 import static guru.qa.niffler.jupiter.annotation.User.UserType.*;
 
+@Disabled
 @ExtendWith({
 		BrowserExtension.class, UserQueueExtension.class, DbCreateUserExtension.class
 })

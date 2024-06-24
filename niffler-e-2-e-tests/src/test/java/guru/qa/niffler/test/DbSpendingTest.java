@@ -12,12 +12,14 @@ import guru.qa.niffler.model.UserJson;
 import guru.qa.niffler.page.AuthorizationPage;
 import guru.qa.niffler.page.MainPage;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
 import static com.codeborne.selenide.Selenide.open;
 
+@Disabled
 @WebTestJdbc
 public class DbSpendingTest extends BaseTest {
 

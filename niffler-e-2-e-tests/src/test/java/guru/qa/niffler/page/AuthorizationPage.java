@@ -9,7 +9,8 @@ public class AuthorizationPage {
 
 	private final SelenideElement
 			loginButton = $x("//a[contains(text(),'Login')]"),
-			registerButton = $x("//a[contains(text(),'Register')]");
+			registerButton = $x("//a[contains(text(),'Register')]"),
+			title = $x("//h1[contains(text(),'Welcome to magic journey with Niffler. The coin ke')]");
 
 	public LoginPage clickLoginButton() {
 		loginButton.click();
@@ -20,8 +21,18 @@ public class AuthorizationPage {
 		loginButton.should(visible);
 	}
 
-	public void ClickRegisterButton() {
+	public RegisterPage clickRegisterButton() {
 		registerButton.click();
+		return new RegisterPage();
 	}
 
+	public AuthorizationPage checkRegisterButton() {
+		registerButton.shouldBe(visible);
+		return this;
+	}
+
+	public AuthorizationPage checkTitle() {
+		title.shouldBe(visible);
+		return this;
+	}
 }

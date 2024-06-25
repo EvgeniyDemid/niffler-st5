@@ -52,6 +52,7 @@ public class HttpSpendingTest extends BaseTest {
 	@GenerateSpend(2)
 	@Test
 	void createTwoSpend(SpendJson[] spends) {
+
 		mainPage.checkFullSpend(spends);
 	}
 }

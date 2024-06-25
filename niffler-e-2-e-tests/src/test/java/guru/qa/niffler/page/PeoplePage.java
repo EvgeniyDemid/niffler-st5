@@ -1,5 +1,6 @@
 package guru.qa.niffler.page;
 
+import com.codeborne.selenide.CollectionCondition;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import guru.qa.niffler.model.UserJson;
@@ -37,6 +38,8 @@ public class PeoplePage extends BasePage<PeoplePage> {
 
 	@Step("Проверить список пользователей")
 	public void checkListUser(UserJson[] userJsons) {
-		listUser.shouldHave(userInTable(userJsons));
+		listUser.
+				shouldHave(CollectionCondition.sizeGreaterThan(0)).
+				shouldHave(userInTable(userJsons));
 	}
 }

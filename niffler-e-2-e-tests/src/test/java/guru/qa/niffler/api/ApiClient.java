@@ -48,7 +48,7 @@ public abstract class ApiClient {
 	}
 
 	public ApiClient(String baseUrl, boolean followRedirect, Converter.Factory converter, Level loggingLevel) {
-		this(baseUrl, followRedirect, converter, loggingLevel, null);
+		this(baseUrl, followRedirect, converter, loggingLevel, (Interceptor) null);
 	}
 
 	public ApiClient(String baseUrl,

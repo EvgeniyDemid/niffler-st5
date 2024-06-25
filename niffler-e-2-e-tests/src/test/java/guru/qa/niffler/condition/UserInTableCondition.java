@@ -24,36 +24,31 @@ public class UserInTableCondition extends WebElementsCondition {
 	@Nonnull
 	@Override
 	public CheckResult check(Driver driver, List<WebElement> elements) {
-
-		for (int i = 0; i < elements.size(); i++) {
-			WebElement row = elements.get(i);
-			UserJson expectedUserForRow = expectUsers[i];
-
-			List<WebElement> td = row.findElements(By.cssSelector("td"));
-
-			String usernameActual = td.get(1).getText();
-			String nameActual = td.get(2).getText();
-
-			String actualUser = "- " + usernameActual + " | " + nameActual;
-
-			boolean dateResult = usernameActual.contains(
-					expectedUserForRow.username()
-			);
-
-			if (!dateResult) {
-				return CheckResult.rejected(
-						"User table: username mismatch",
-						actualUser
-				);
+		String actualUser = null;
+		for (UserJson expectedUserForRow : expectUsers) {
+			boolean usernameResult = false;
+			for (int i = 0; i < elements.size(); i++) {
+				WebElement row = elements.get(i);
+				List<WebElement> td = row.findElements(By.cssSelector("td"));
+				String usernameActual = td.get(1).getText();
+				String nameActual = td.get(2).getText();
+				actualUser = usernameActual + " " + nameActual;
+				usernameResult = usernameActual.contains(expectedUserForRow.username());
+				if (usernameResult) {
+					boolean nameResult = nameActual.contains(
+							expectedUserForRow.firstname() + " " + expectedUserForRow.surname());
+					if (!nameResult) {
+						return CheckResult.rejected(
+								"User table: name mismatch",
+								actualUser
+						);
+					}
+					break;
+				}
 			}
-
-			boolean nameResult = nameActual.contains(
-					expectedUserForRow.firstname() + " " + expectedUserForRow.surname()
-			);
-
-			if (!nameResult) {
+			if (!usernameResult) {
 				return CheckResult.rejected(
-						"User table: username mismatch",
+						"User table: username noFound",
 						actualUser
 				);
 			}

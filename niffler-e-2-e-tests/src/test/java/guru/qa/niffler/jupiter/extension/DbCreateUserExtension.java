@@ -3,6 +3,7 @@ package guru.qa.niffler.jupiter.extension;
 import guru.qa.niffler.data.entity.UserAuthEntity;
 import guru.qa.niffler.data.entity.UserEntity;
 import guru.qa.niffler.data.repository.UserRepositoryStringJdbc;
+import guru.qa.niffler.data.repository.logging.JsonAllureAppender;
 import guru.qa.niffler.model.UserJson;
 
 import java.util.Arrays;
@@ -10,11 +11,14 @@ import java.util.Arrays;
 public class DbCreateUserExtension extends CreateUserExtension {
 
 	private final UserRepositoryStringJdbc userRepositoryStringJdbc = new UserRepositoryStringJdbc();
+	private final JsonAllureAppender jsonAllureAppender = new JsonAllureAppender();
 
 	@Override
 	UserJson createUser(UserJson user) {
 		UserEntity userEntity = userRepositoryStringJdbc.createUserInUserdata(new UserEntity().fromJson(user));
-		userRepositoryStringJdbc.createUserInAuth(new UserAuthEntity().fromJson(user));
+		UserAuthEntity userAuthEntity = userRepositoryStringJdbc.createUserInAuth(new UserAuthEntity().fromJson(user));
+		jsonAllureAppender.logJson("userAuthEntity", userAuthEntity);
+		jsonAllureAppender.logJson("userEntity", userEntity);
 
 		return new UserJson(
 				userEntity.getId(),

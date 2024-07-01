@@ -1,6 +1,5 @@
 package guru.qa.niffler.test;
 
-import com.codeborne.selenide.ElementsCollection;
 import guru.qa.niffler.jupiter.annotation.GenerateCategory;
 import guru.qa.niffler.jupiter.annotation.GenerateSpend;
 import guru.qa.niffler.jupiter.annotation.TestUser;
@@ -11,9 +10,7 @@ import guru.qa.niffler.page.AuthorizationPage;
 import guru.qa.niffler.page.MainPage;
 import org.junit.jupiter.api.*;
 
-import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
-import static guru.qa.niffler.condition.SpendCondition.spendsInTable;
 
 @TestClassOrder(ClassOrderer.OrderAnnotation.class)
 @Nested
@@ -27,13 +24,6 @@ public class HttpSpendingTest extends BaseTest {
 	void doLogin(UserJson userJson) {
 		open(MainPage.url, AuthorizationPage.class).
 				clickLoginButton().login(userJson);
-	}
-
-	@TestUser
-	@Test
-	void anotherTest() {
-		open(MainPage.url, AuthorizationPage.class).
-				loginButtonIsVisible();
 	}
 
 	@TestUser

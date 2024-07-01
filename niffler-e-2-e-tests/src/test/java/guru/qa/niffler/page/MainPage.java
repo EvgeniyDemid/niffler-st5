@@ -3,6 +3,7 @@ package guru.qa.niffler.page;
 import com.codeborne.selenide.CollectionCondition;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
+import guru.qa.niffler.model.SpendJson;
 import io.qameta.allure.Step;
 
 import java.text.SimpleDateFormat;
@@ -12,6 +13,7 @@ import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.*;
+import static guru.qa.niffler.condition.SpendCondition.spendsInTable;
 
 public class MainPage extends BasePage<MainPage> {
 
@@ -192,6 +194,12 @@ public class MainPage extends BasePage<MainPage> {
 	@Step("Проверить, что отображается ошибка о создании страты в будущем")
 	public MainPage checkErrorFutureDate() {
 		errorFutureDate.shouldBe(visible);
+		return this;
+	}
+
+	@Step("Проверить строку трат")
+	public MainPage checkFullSpend(SpendJson[] spends) {
+		listSpending.shouldHave(spendsInTable(spends));
 		return this;
 	}
 }

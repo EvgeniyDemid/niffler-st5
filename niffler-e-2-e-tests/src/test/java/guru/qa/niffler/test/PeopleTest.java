@@ -2,6 +2,7 @@ package guru.qa.niffler.test;
 
 import guru.qa.niffler.jupiter.annotation.User;
 import guru.qa.niffler.jupiter.extension.BrowserExtension;
+import guru.qa.niffler.jupiter.extension.DbCreateUserExtension;
 import guru.qa.niffler.jupiter.extension.UserQueueExtension;
 import guru.qa.niffler.model.UserJson;
 import guru.qa.niffler.page.AuthorizationPage;
@@ -18,7 +19,7 @@ import static guru.qa.niffler.jupiter.annotation.User.UserType.*;
 
 @Disabled
 @ExtendWith({
-		BrowserExtension.class, UserQueueExtension.class
+		BrowserExtension.class, UserQueueExtension.class, DbCreateUserExtension.class
 })
 public class PeopleTest {
 

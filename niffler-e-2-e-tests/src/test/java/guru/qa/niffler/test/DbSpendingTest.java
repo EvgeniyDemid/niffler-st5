@@ -37,7 +37,7 @@ public class DbSpendingTest extends BaseTest {
 
 	@TestUser
 	@GenerateCategory
-	@GenerateSpend
+	@GenerateSpend(1)
 	@Test
 	void spendingShouldBeVisibleAfterCreate(SpendJson spendJson) {
 		mainPage.checkSpendingIsVisible(spendJson.description());
@@ -45,7 +45,7 @@ public class DbSpendingTest extends BaseTest {
 
 	@TestUser
 	@GenerateCategory
-	@GenerateSpend
+	@GenerateSpend(1)
 	@Test
 	void checkSpendingAfterCreateJdbc(SpendJson spendJson) {
 		List<SpendEntity> listSpend = spendRepositoryJdbc.findAllByUsername(spendJson.username());
@@ -56,7 +56,7 @@ public class DbSpendingTest extends BaseTest {
 
 	@TestUser
 	@GenerateCategory
-	@GenerateSpend
+	@GenerateSpend(1)
 	@Test
 	void checkSpendingAfterCreateStringJdbc(SpendJson spendJson) {
 		List<SpendEntity> listSpend = spendRepositoryStringJdbc.findAllByUsername(spendJson.username());

@@ -18,6 +18,8 @@ public interface Config {
 
 	String gatewayUrl();
 
+	String authUrl();
+
 	String dbHost();
 
 	default int dbPort() {

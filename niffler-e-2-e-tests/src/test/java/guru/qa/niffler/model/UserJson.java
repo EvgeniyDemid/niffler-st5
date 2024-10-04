@@ -75,6 +75,19 @@ public record UserJson(
 				new TestData(faker.internet().password()));
 	}
 
+	public static UserJson dataFromUser(String username, String password) {
+		return new UserJson(
+				null,
+				username,
+				faker.name().firstName(),
+				faker.name().lastName(),
+				CurrencyValues.values()[(int) ((Math.random()) * (CurrencyValues.values().length))],
+				faker.internet().url(),
+				faker.internet().url(),
+				null,
+				new TestData(password));
+	}
+
 	public static UserJson fromEntity(UserEntity userEntity) {
 		return new UserJson(
 				userEntity.getId(),

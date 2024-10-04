@@ -2,13 +2,13 @@ package guru.qa.niffler.test;
 
 import com.github.javafaker.Faker;
 import guru.qa.niffler.jupiter.annotation.AddCategoryWithoutDelete;
+import guru.qa.niffler.jupiter.annotation.ApiLogin;
 import guru.qa.niffler.jupiter.annotation.TestUser;
+import guru.qa.niffler.jupiter.extension.ApiLoginExtension;
 import guru.qa.niffler.jupiter.extension.BrowserExtension;
 import guru.qa.niffler.jupiter.extension.DbCategoryExtension;
 import guru.qa.niffler.jupiter.extension.DbCreateUserExtension;
 import guru.qa.niffler.model.CategoryJson;
-import guru.qa.niffler.model.UserJson;
-import guru.qa.niffler.page.AuthorizationPage;
 import guru.qa.niffler.page.MainPage;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,28 +25,34 @@ import static guru.qa.niffler.enums.Alert.*;
 @TestClassOrder(ClassOrderer.OrderAnnotation.class)
 @Nested
 @Order(1)
-@ExtendWith({BrowserExtension.class, DbCreateUserExtension.class, DbCategoryExtension.class})
+@ExtendWith({BrowserExtension.class,
+		DbCreateUserExtension.class,
+		DbCategoryExtension.class,
+		ApiLoginExtension.class})
+
 public class UiSpendingTest extends BaseTest {
 	MainPage mainPage = new MainPage();
 	Faker faker = new Faker();
 
-	@BeforeEach
-	public void login(UserJson userJson) {
-		open(MainPage.url, AuthorizationPage.class).clickLoginButton().login(userJson);
-	}
-
 	@Test
-	@TestUser
+	@ApiLogin(
+			username = "user123111111",
+			password = "12345"
+	)
 	public void selectDataSpend() {
 		Date date = new GregorianCalendar(2024, Calendar.FEBRUARY, 1).getTime();
-		mainPage.setSpendDate(date).checkSpendDate(date);
+		open(MainPage.url, MainPage.class).
+				setSpendDate(date).
+				checkSpendDate(date);
 	}
 
 	@Test
-	@TestUser
+	@ApiLogin(
+			randomUser = true
+	)
 	public void createNewCategory() {
 		String category = faker.job().field();
-		mainPage.
+		open(MainPage.url, MainPage.class).
 				clickProfileButton().
 				checkPageLoader().
 				setCategory(category).
@@ -57,9 +63,10 @@ public class UiSpendingTest extends BaseTest {
 
 	@Test
 	@TestUser
+	@ApiLogin()
 	public void addDuplicateCategory() {
 		String category = faker.job().field();
-		mainPage.
+		open(MainPage.url, MainPage.class).
 				clickProfileButton().
 				checkPageLoader().
 				setCategory(category).
@@ -71,8 +78,9 @@ public class UiSpendingTest extends BaseTest {
 
 	@Test
 	@TestUser
+	@ApiLogin()
 	public void checkAddCategoryInfo() {
-		mainPage.
+		open(MainPage.url, MainPage.class).
 				clickProfileButton().
 				checkPageLoader().
 				checkAddCategoryInfo();
@@ -80,8 +88,9 @@ public class UiSpendingTest extends BaseTest {
 
 	@Test
 	@TestUser
+	@ApiLogin()
 	public void createSevenNewCategory() {
-		mainPage.
+		open(MainPage.url, MainPage.class).
 				clickProfileButton().
 				checkPageLoader().
 				createNCategory(7).
@@ -90,8 +99,9 @@ public class UiSpendingTest extends BaseTest {
 
 	@Test
 	@TestUser
+	@ApiLogin()
 	public void createEightNewCategory() {
-		mainPage.
+		open(MainPage.url, MainPage.class).
 				clickProfileButton().
 				checkPageLoader().
 				createNCategory(8).
@@ -100,8 +110,9 @@ public class UiSpendingTest extends BaseTest {
 
 	@Test
 	@TestUser
+	@ApiLogin()
 	public void createNineNewCategory() {
-		mainPage.
+		open(MainPage.url, MainPage.class).
 				clickProfileButton().
 				checkPageLoader().
 				createNCategory(9).
@@ -111,8 +122,9 @@ public class UiSpendingTest extends BaseTest {
 	@Test
 	@TestUser
 	@AddCategoryWithoutDelete
+	@ApiLogin()
 	public void checkCategoryOnAfterCreate(CategoryJson categoryJson) {
-		mainPage.
+		open(MainPage.url, MainPage.class).
 				clickChooseSpendingField().
 				checkCategoryDropdownList(categoryJson.category());
 
@@ -121,8 +133,9 @@ public class UiSpendingTest extends BaseTest {
 	@Test
 	@TestUser
 	@AddCategoryWithoutDelete
+	@ApiLogin()
 	public void createSendWithoutDescription(CategoryJson categoryJson) {
-		mainPage.
+		open(MainPage.url, MainPage.class).
 				clickChooseSpendingField().
 				selectCategoryDropdownList(categoryJson.category()).
 				setAmount("6500").
@@ -133,8 +146,9 @@ public class UiSpendingTest extends BaseTest {
 	@Test
 	@TestUser
 	@AddCategoryWithoutDelete
+	@ApiLogin()
 	public void createSendWithDescription(CategoryJson categoryJson) {
-		mainPage.
+		open(MainPage.url, MainPage.class).
 				clickChooseSpendingField().
 				selectCategoryDropdownList(categoryJson.category()).
 				setAmount("6500").
@@ -146,9 +160,10 @@ public class UiSpendingTest extends BaseTest {
 	@Test
 	@TestUser
 	@AddCategoryWithoutDelete
+	@ApiLogin()
 	public void createSendLastDate(CategoryJson categoryJson) {
 		Date date = new GregorianCalendar(2024, Calendar.SEPTEMBER, 1).getTime();
-		mainPage.
+		open(MainPage.url, MainPage.class).
 				clickChooseSpendingField().
 				selectCategoryDropdownList(categoryJson.category()).
 				setSpendDate(date).
@@ -161,9 +176,10 @@ public class UiSpendingTest extends BaseTest {
 	@Test
 	@TestUser
 	@AddCategoryWithoutDelete
+	@ApiLogin()
 	public void createSendBeforeDate(CategoryJson categoryJson) {
 		Date date = new GregorianCalendar(2024, Calendar.JANUARY, 1).getTime();
-		mainPage.
+		open(MainPage.url, MainPage.class).
 				clickChooseSpendingField().
 				selectCategoryDropdownList(categoryJson.category()).
 				setSpendDate(date).
@@ -176,9 +192,10 @@ public class UiSpendingTest extends BaseTest {
 	@Test
 	@TestUser
 	@AddCategoryWithoutDelete
+	@ApiLogin()
 	public void deleteSend(CategoryJson categoryJson) {
 		String description = "test";
-		mainPage.
+		open(MainPage.url, MainPage.class).
 				clickChooseSpendingField().
 				selectCategoryDropdownList(categoryJson.category()).
 				setAmount("6500").
@@ -192,9 +209,10 @@ public class UiSpendingTest extends BaseTest {
 	@Test
 	@TestUser
 	@AddCategoryWithoutDelete
+	@ApiLogin()
 	public void checkFilterToday(CategoryJson categoryJson) {
 		String description = "test";
-		mainPage.
+		open(MainPage.url, MainPage.class).
 				clickChooseSpendingField().
 				selectCategoryDropdownList(categoryJson.category()).
 				setAmount("6500").
@@ -208,9 +226,10 @@ public class UiSpendingTest extends BaseTest {
 	@Test
 	@TestUser
 	@AddCategoryWithoutDelete
+	@ApiLogin()
 	public void editAmountSpendAfterCreate(CategoryJson categoryJson) {
 		String description = "test";
-		mainPage.
+		open(MainPage.url, MainPage.class).
 				clickChooseSpendingField().
 				selectCategoryDropdownList(categoryJson.category()).
 				setAmount("6500").
@@ -226,9 +245,10 @@ public class UiSpendingTest extends BaseTest {
 	@Test
 	@TestUser
 	@AddCategoryWithoutDelete
+	@ApiLogin()
 	public void editEditSpendDescriptionSpendAfterCreate(CategoryJson categoryJson) {
 		String description = "test";
-		mainPage.
+		open(MainPage.url, MainPage.class).
 				clickChooseSpendingField().
 				selectCategoryDropdownList(categoryJson.category()).
 				setAmount("6500").
